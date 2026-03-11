@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛博方块 CyberTetris</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container" style="display: none;">
+        <!-- 背景特效 -->
+        <div id="bg-effect"></div>
+        
+        <!-- 顶部信息栏 -->
+        <div id="top-bar">
+            <div class="stat">
+                <span class="label">段位</span>
+                <span id="rank" class="value bronze">青铜</span>
+            </div>
+            <div class="stat">
+                <span class="label">关卡</span>
+                <span id="level" class="value">1</span>
+            </div>
+            <div class="stat">
+                <span class="label">分数</span>
+                <span id="score" class="value">0</span>
+            </div>
+            <div class="stat">
+                <span class="label">消除行数</span>
+                <span id="lines" class="value">0</span>
+            </div>
+        </div>
+
+        <!-- 主游戏区 -->
+        <div id="main-area">
+            <!-- 左侧面板 -->
+            <div id="left-panel">
+                <div class="panel-box">
+                    <h3>下一个</h3>
+                    <canvas id="next-canvas" width="120" height="120"></canvas>
+                </div>
+                <div class="panel-box">
+                    <h3>技能能量</h3>
+                    <div id="skill-meter">
+                        <div id="skill-fill"></div>
+                    </div>
+                    <div id="active-skill">无</div>
+                </div>
+                <div class="panel-box">
+                    <h3>悔步 <span id="undo-count">3</span>/3</h3>
+                    <button id="undo-btn" class="game-btn">↩ 悔步</button>
+                </div>
+            </div>
+
+            <!-- 游戏画布 -->
+            <div id="game-board">
+                <canvas id="game-canvas" width="300" height="600"></canvas>
+                <div id="game-overlay" class="hidden">
+                    <div id="overlay-content">
+                        <h2 id="overlay-title">游戏暂停</h2>
+                        <p id="overlay-desc">按空格键继续</p>
+                        <button id="overlay-btn" class="game-btn">继续游戏</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧面板 -->
+            <div id="right-panel">
+                <div class="panel-box">
+                    <h3>每日任务</h3>
+                    <div id="daily-tasks">
+                        <div class="task" data-task="lines50">
+                            <span class="task-icon">📊</span>
+                            <span class="task-text">消除50行</span>
+                            <span class="task-progress">0/50</span>
+                        </div>
+                        <div class="task" data-task="skills2">
+                            <span class="task-icon">⚡</span>
+                            <span class="task-text">触发2次技能</span>
+                            <span class="task-progress">0/2</span>
+                        </div>
+                        <div class="task" data-task="level1">
+                            <span class="task-icon">🎯</span>
+                            <span class="task-text">通关新关卡</span>
+                            <span class="task-progress">0/1</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-box">
+                    <h3>已解锁皮肤</h3>
+                    <div id="skins">
+                        <div class="skin active" data-skin="default" title="经典"></div>
+                    </div>
+                </div>
+                <div class="panel-box">
+                    <h3>操作说明</h3>
+                    <div id="controls">
+                        <p>← → : 左右移动</p>
+                        <p>↑ : 旋转</p>
+                        <p>↓ : 加速下落</p>
+                        <p>空格 : 快速下落</p>
+                        <p>Z : 悔步</p>
+                        <p>P : 暂停</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部进度 -->
+        <div id="bottom-bar">
+            <div id="rank-progress">
+                <span>段位进度</span>
+                <div class="progress-bar">
+                    <div id="rank-fill"></div>
+                </div>
+                <span id="rank-text">0/100 行</span>
+            </div>
+        </div>
+
+        <!-- 事件提示 -->
+        <div id="event-toast" class="hidden"></div>
+
+        <!-- 粒子容器 -->
+        <div id="particles"></div>
+    </div>
+
+    <!-- 开始画面 -->
+    <div id="start-screen">
+        <div class="neon-title">
+            <h1>赛博方块</h1>
+            <h2>CYBER TETRIS</h2>
+        </div>
+        <div class="menu-buttons">
+            <button id="start-btn" class="neon-btn">开始游戏</button>
+            <button id="select-level-btn" class="neon-btn">选择关卡</button>
+            <button id="settings-btn" class="neon-btn">设置</button>
+        </div>
+        <div id="level-select" class="hidden">
+            <h3>选择关卡</h3>
+            <div id="level-grid"></div>
+            <button id="back-btn" class="neon-btn">返回</button>
+        </div>
+    </div>
+
+    <!-- 游戏结束画面 -->
+    <div id="game-over" class="hidden">
+        <div class="neon-title">
+            <h1>游戏结束</h1>
+            <h2 id="final-score">最终得分: 0</h2>
+        </div>
+        <div class="menu-buttons">
+            <button id="restart-btn" class="neon-btn">再来一局</button>
+            <button id="menu-btn" class="neon-btn">返回菜单</button>
+        </div>
+    </div>
+
+    <script src="js/levels.js"></script>
+    <script src="js/skills.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
